@@ -4,7 +4,7 @@
 
 ## 배포 중인 프로젝트
 
-[여기](http://ec2-3-35-38-212.ap-northeast-2.compute.amazonaws.com/)에서 확인할 수 있습니다.
+[>> 프로젝트 <<](http://ec2-3-35-38-212.ap-northeast-2.compute.amazonaws.com/)에서 확인할 수 있습니다.
 
 ### 관리자 계정
 - ID: admin@admin.com
@@ -23,7 +23,7 @@
 - 웹 브라우저: Chrome
 - 언어: Java 17
 - 프레임워크: Spring Boot
-- 내장 톰캣 서버 사용
+- 내장 톰캣서버 개발 / AWS Cloud EC2 + RDS 배포
 - 기술: Spring Data JPA, JavaScript, HTML5, CSS3
 
 ## 도구 및 API
