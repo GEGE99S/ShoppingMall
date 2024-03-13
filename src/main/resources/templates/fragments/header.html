@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <div th:fragment="header">
+    <form class="search_Form" th:action="@{/}" method="get">
+      <a class="home_a link-opacity-50-hover" href="/">Shop</a>
+      <input
+        name="searchQuery"
+        class="search_Input"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+      />
+      <button class="search_Btn" type="submit">Search</button>
+      <ul class="log_ul">
+        <li class="log_li" sec:authorize="isAnonymous()">
+          <a href="/members/login">로그인</a>
+        </li>
+        <li class="log_li" sec:authorize="isAuthenticated()">
+          <a href="/members/logout">로그아웃</a>
+        </li>
+      </ul>
+    </form>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarTogglerDemo03"
+          aria-controls="navbarTogglerDemo03"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="header_div" id="navbarTogglerDemo03">
+          <ul class="header_ul">
+            <li class="header_li" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+              <a class="header_a" href="/admin/item/new">상품 등록</a>
+            </li>
+            <li class="header_li" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+              <a class="header_a" href="/admin/items">상품 관리</a>
+            </li>
+            <li class="header_li" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+              <a class="header_a" href="/admin/banner">배너 판촉 관리</a>
+            </li>
+            <li class="header_li" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+              <a class="header_a" href="/admin/members">회원관리</a>
+            </li>
+            <li class="header_li" sec:authorize="isAuthenticated()">
+              <a class="header_a" href="/cart">장바구니</a>
+            </li>
+            <li class="header_li" sec:authorize="isAuthenticated()">
+              <a class="header_a" href="/orders">구매이력</a>
+            </li>
+            <hr/>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</html>

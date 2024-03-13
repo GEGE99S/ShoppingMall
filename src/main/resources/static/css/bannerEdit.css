@@ -1,0 +1,39 @@
+.content .bannerADContainer {
+  display: flex;
+  flex-flow: wrap;
+}
+.content form .form-floating {
+  justify-content: center;
+}
+.content form .form-floating #itemSelect {
+  width: 70%;
+  font-size: 1em;
+}
+.content form .ADinput {
+  display: flex;
+}
+.content form .ADinput #imageFile {
+  width: calc 40%;
+}
+.content form #messageSpan {
+  color: red;
+}
+.content .bannerADContainer div .bannerADImg {
+  width: 100%;
+  max-width: 1330px;
+  max-height: 350px;
+  min-height: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 50px;
+}
+.content .bannerADContainer div .deleteButton {
+  margin-top: 5px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 1330px;
+  height: 40px;
+}
+.content .bannerADContainer div .deleteButton:hover {
+  background-color: #c82333;
+}

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+        $("#searchBtn").on("click",function(e){
+            e.preventDefault();
+            page(0);
+        });
+
+
+        $(".modify_only").click(function(){
+            var row = $(this).closest("tr");
+            var email = row.find("td:eq(2)").text();
+            var name = row.find("td:eq(1)").text();
+            var role = $(this).data('role');
+            modify(email,name,role);
+        });
+    });
+
+    function save(){
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        const email = $("#modify_email").val();
+        const name = $("#modify_name").val();
+        const role = $("#modify_select").val();
+
+        let data = {
+            "email" : email,
+            "name" : name,
+            "role" : role
+        };
+         var param = JSON.stringify(data);
+
+        $.ajax({
+            url:"/admin/member/modify",
+            type:"POST",
+            contentType : "application/json",
+            dataType:"json",
+            data:param,
+            beforeSend : function(xhr){
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(data){
+                alert("수정완료");
+                location.href='/admin/members';
+            },
+            error : function(jqXHR, status, error){
+                alert(jqXHR.responseText);
+            }
+        });
+    }
+
+    function modify(email,name,role){
+        var modal = $("#modify_modal");
+
+        $("#modify_email").attr('value',email);
+        $("#modify_name").attr('value',name);
+        $("#modify_select").val(role).prop("selected",true);
+
+        modal.css('display', 'block');
+    }
+
+
+    function page(page){
+        var searchDateType = $("#searchDateType").val();
+        var searchRole = $("#searchRole").val();
+        var searchName = $("#searchName").val();
+        var searchQuery = $("#searchQuery").val();
+        location.href="/admin/members/"+page+"?searchDateType="+searchDateType
+        +"&searchRole="+searchRole+"&searchName="+searchName+"&searchQuery="+searchQuery;
+    }
+
+    function cancel(){
+        var modal = $("#modify_modal");
+        modal.css('display', 'none');
+    }
+    </script>
+</th:block>
+
+<th:block layout:fragment="css">
+    <style>
+        .select_div{
+        width: 520px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin: 0 auto;
+    }
+    li.nav-item{
+        width: 30%; height: 40px; border: none; font-size: 14px; font-weight: bold; text-align: center; color: #0055B3; border-radius: 7px; box-shadow: 2px 2px 2px 2px #9DB1C5; margin-top: 10px; margin-bottom: 5px;
+    }
+    .select{
+        width: 30%;
+        height: 40px;
+        border: none;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        color: #0055B3;
+        border-radius: 7px;
+        box-shadow: 2px 2px 2px 2px #9DB1C5;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+    .select_item{
+        border-radius: 6px;
+        width: 250px;
+        height: 40px;
+        text-align: center;
+    }
+    .modify{
+        text-decoration-line: none;
+        color: #46F1BB;
+        cursor: pointer;
+        font-size: 17px;
+        font-weight: bold;
+    }
+    .modify:link  {
+        color: #46F1BB;
+    }
+    .modify:visited{
+        color: #46F1BB;
+    }
+    .modify:active{
+        color: #46F1BB;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 4;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.2);
+    }
+
+    .modal_content {
+        width: 400px;
+        height: 400px;
+        background-color: #324B4D;
+        color: white;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .modal_item{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 30px;
+    }
+
+    .label{
+        height: 40px;
+        width: 100px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .modal_input{
+        height: 40px;
+        width: 250px;
+        border-radius: 7px;
+        text-align: center;
+        font-size: 15px;
+        border: none;
+        box-shadow: 1px 2px 1px 2px black;
+    }
+
+    .modal_select{
+        height: 40px;
+        width: 160px;
+        border-radius: 7px;
+        text-align: center;
+        font-size: 15px;
+        padding: 5px;
+        border: none;
+        box-shadow: 1px 2px 1px 2px black;
+    }
+
+    .modal_btn {
+        color: #aaaaaa;
+        font-size: 23px;
+        font-weight: bold;
+        margin-top: 40px;
+        border-radius: 7px;
+        width: 100px;
+        height: 40px;
+        border: none;
+        box-shadow: 1px 2px 1px 2px black;
+    }
+
+    .modal_btn:hover,
+    .modal_btn:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <form th:action="@{'/admin/members/' + ${members.number}}" role="form" method="get" th:object="${members}">
+        <div th:object="${memberSearchDto}">
+            <div class="select_div">
+                <select th:field="*{searchDateType}" class="select">
+                    <option value="all">전체기간</option>
+                    <option value="1d">1일</option>
+                    <option value="1w">1주</option>
+                    <option value="1m">1개월</option>
+                    <option value="6m">6개월</option>
+                </select>
+                <select th:field="*{searchRole}" class="select">
+                    <option value="">==선택==</option>
+                    <option value="ADMIN">관리자</option>
+                    <option value="USER">회원</option>
+                </select>
+            </div>
+            <div class="select_div">
+                <select th:field="*{searchName}" class="select">
+                    <option value="name">이름</option>
+                    <option value="telNumber">전화번호</option>
+                </select>
+                <input th:field="*{searchQuery}" type="text" class="select_item" placeholder="검색어를 입력해주세요">
+                <button id="searchBtn" type="submit" class="btn btn-outline-info">검색</button>
+            </div>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>회원아이디</th>
+                <th>이름</th>
+                <th>이메일</th>
+                <th>전화번호</th>
+                <th>생성일</th>
+                <th>수정</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member, status: ${members.getContent()}">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.name}"></td>
+                <td th:text="${member.email}"></td>
+                <td th:text="${member.telNumber}"></td>
+                <td th:text="${member.regTime}"></td>
+                <td><input type="button" value="수정" th:data-role="${member.role}" class="modify_only"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div id="modify_modal" class="modal">
+            <div class="modal_content">
+                <div class="modal_item">
+                    <label class="label">이메일</label>
+                    <input type="text" id="modify_email" class="modal_input" readonly>
+                </div>
+                <div class="modal_item">
+                    <label class="label">이 름</label>
+                    <input type="text" id="modify_name" class="modal_input">
+                </div>
+                <div class="modal_item">
+                    <label class="label">권 한</label>
+                    <select class="modal_select" id="modify_select">
+                        <option value="ADMIN">관리자</option>
+                        <option value="USER">회원</option>
+                    </select>
+                </div>
+                <div class="modal_item">
+                    <button class="modal_btn" id="modify_btn" onclick="save()">저장</button>
+                    <button class="modal_btn" id="close_btn" onclick="cancel()">취소</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div th:with="start=${(members.number/maxPage)*maxPage + 1},
+            end=(${(members.totalPages == 0) ? 1 : (start + (maxPage - 1) < members.totalPages ? start + (maxPage - 1) : members.totalPages)})">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${members.first}?'disabled'">
+                    <a th:onclick="'javascript:page('+${members.number -1} + ')'" aria-label='Previous'
+                       class="page-link">
+                        <span aria-hidden="true">이전</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
+                    th:classappend="${members.number eq page-1}?' active':''">
+                    <a th:onclick="'javascript:page(' + ${page -1} + ')'" th:inline="text"
+                       class="page-link">[[${page}]]</a>
+                </li>
+                <li class="page-item" th:classappend="${members.last}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${members.number + 1} + ')'" aria-label="Next"
+                       class="page-link">
+                        <span aria-hidden="true">다음</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>
+</html>

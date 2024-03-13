@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .error{
+            color: #bd2130;
+        }
+        .form_div{
+            width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .flex_div{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .flex_item{
+            width: 30%;
+        }
+        .img{
+            width: 200px;
+            height: 60px;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <form action="/members/login" role="form" method="post" class="form_div">
+        <div class="row g-3 align-items-center flex_div">
+            <div class="col-auto flex_item">
+                <label th:for="email" class="col-form-label">이메일 주소</label>
+            </div>
+            <div class="col-auto flex_item">
+                <input type="email" name="email" class="form-control" aria-describedby="passwordHelpInline">
+            </div>
+            <div class="col-auto flex_item">
+                    <span id="passwordHelpInline" class="form-text">
+                        이메일을 입력해주세요.
+                    </span>
+            </div>
+        </div>
+        <div class="row g-3 align-items-center flex_div">
+            <div class="col-auto flex_item">
+                <label th:for="password">비밀번호</label>
+            </div>
+            <div class="col-auto flex_item">
+                <input type="password" name="password" class="form-control" aria-describedby="passwordHelpInline1">
+            </div>
+            <div class="col-auto flex_item">
+                    <span id="passwordHelpInline1" class="form-text">
+                        비밀번호 입력
+                    </span>
+            </div>
+        </div>
+        <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+        <div class="flex_div">
+            <button class="btn btn-outline-success">로그인</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='/members/new'">회원가입</button>
+        </div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    </form>
+    <div class="flex_div">
+        <a href="/oauth2/authorization/google"><img src="/icon/google.png" class="img"></a>
+        <a href="/oauth2/authorization/kakao"><img src="/icon/kakao.png" class="img"></a>
+        <a href="/oauth2/authorization/naver"><img src="/icon/naver.png" class="img"></a>
+    </div>
+</div>
+</html>
